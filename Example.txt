@@ -1,2 +1,5 @@
-. .\Example-Provision.ps1;Example;Start-DscConfiguration .\Example\ -Wait -Force -Verbose
-Test-DscConfiguration .\Example\ -Verbose
+. .\Example-Provision.ps1;UninstallExample;Start-DscConfiguration .\UninstallExample\ -Wait -Force -Verbose
+Test-DscConfiguration .\UninstallExample\ -Verbose
+
+. .\Example-Provision.ps1;InstallExample;Start-DscConfiguration .\InstallExample\ -Wait -Force -Verbose
+Test-DscConfiguration .\InstallExample\ -Verbose

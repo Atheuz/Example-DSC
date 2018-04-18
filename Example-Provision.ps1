@@ -1,5 +1,33 @@
 
-Configuration Example {
+Configuration UninstallExample {
+    Import-DscResource -ModuleName "PSDesiredStateConfiguration"
+    Import-DscResource -ModuleName "xPSDesiredStateConfiguration"
+
+    $ConfigurationData = @{
+    AllNodes = @(
+        @{
+            NodeName = 'localhost'
+            PSDscAllowPlainTextPassword = $true
+            PsDscAllowDomainUser = $true
+            ZipFile = "C:\Users\grave\Desktop\DSC Example\Work\master.zip"
+            WorkFolder = "C:\Users\grave\Desktop\DSC Example\Work"
+            ExtractedFolder = "C:\Users\grave\Desktop\DSC Example\Work\extracted"
+            DownloadUri = "https://github.com/Atheuz/Falcon-Case/archive/master.zip"
+        })
+    }
+
+    Node 'localhost'
+    {
+        File RemoveExistingWorkFolder 
+        {
+            DestinationPath = $ConfigurationData.AllNodes[0].WorkFolder
+            Ensure = "Absent"
+            Type = "Directory"
+        }
+    }
+}
+
+Configuration InstallExample {
     Import-DscResource -ModuleName "PSDesiredStateConfiguration"
     Import-DscResource -ModuleName "xPSDesiredStateConfiguration"   
     $ConfigurationData = @{
@@ -34,30 +62,12 @@ Configuration Example {
             }
         }
 
-        Script RemoveExisting
-        {
-            SetScript = {
-                Remove-Item -Path $Using:ConfigurationData.AllNodes[0].WorkFolder -Force -ErrorAction SilentlyContinue
-                Remove-Item -Path $Using:ConfigurationData.AllNodes[0].ZipFile -Force -ErrorAction SilentlyContinue
-                Remove-Item -Path $Using:ConfigurationData.AllNodes[0].ExtractedFolder -Recurse -Force -ErrorAction SilentlyContinue
-            }
-            TestScript = {
-                return $false # Always run, but this will make it in a not desired state, how to fix?
-            }
-            GetScript = {
-                return @{
-                    Result = $false
-                }
-            }
-            DependsOn = "[Script]EnableTLS12"
-        }
-
         File WorkFolder 
         {
             DestinationPath = $ConfigurationData.AllNodes[0].WorkFolder
             Ensure = "Present"
             Type = "Directory"
-            DependsOn = "[Script]RemoveExisting"
+            DependsOn = "[Script]EnableTLS12"
         }
 
         xRemoteFile ZipFile
