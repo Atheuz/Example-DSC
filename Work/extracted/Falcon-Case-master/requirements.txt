@@ -1,0 +1,11 @@
+redis
+flask>=0.12.2
+flask_restplus
+sqlalchemy
+flask-sqlalchemy
+psycopg2-binary
+Flask-Caching
+celery
+flower
+requests
+websockets
