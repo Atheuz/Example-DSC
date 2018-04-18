@@ -1,0 +1,2 @@
+. .\Example-Provision.ps1;Example;Start-DscConfiguration .\Example\ -Wait -Force -Verbose
+Test-DscConfiguration .\Example\ -Verbose
